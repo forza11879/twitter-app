@@ -1,24 +1,19 @@
-import logo from './logo.svg';
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
+import TweetListPage from './pages/tweets/TweeListPage.js';
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      {/* // Switch prevents rendering multiple components */}
+      <Switch>
+        {/* <Route exact path="/" component={HomePage} /> */}
+        {/* <Route exact={true} path="/" component={AccountPage} /> */}
+        <Route exact={true} path="/" component={TweetListPage} />
+        {/* <Route path="/stock" component={StockPage} /> */}
+      </Switch>
+    </React.Fragment>
   );
 }
 
