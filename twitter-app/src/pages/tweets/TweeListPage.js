@@ -4,10 +4,20 @@ import ItemsCards from '../../components/ItemsCards.component.jsx';
 import SearchControls from '../../components/SearchControls.component.jsx';
 import Controls from '../../components/Controls.component.jsx';
 import Loading from '../../components/Loading.component';
+import configureAppStore from '../../store/configureAppStore';
+import { tweetAdded, getFilteredTweets } from '../../store/tweets';
+
+const store = configureAppStore();
 
 function TweetListPage() {
   const { items, setItem } = useState([]);
   const { searchTerm, setSearchTerm } = useState('JavaScript');
+  store.subscribe(() => {
+    console.log('store changed');
+  });
+  const state = store.getState();
+  // const filteredTweets = getFilteredTweets(state);
+  // store.dispatch(actions.tweetAdded());
   const handleChange = (e) => setSearchTerm(e.target.value);
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -35,13 +45,14 @@ function TweetListPage() {
   };
 
   useEffect(() => {
-    const socket = socketIOClient('http://localhost:3000/');
+    const socket = socketIOClient('http://localhost:3001/');
 
     socket.on('connect', () => {
       console.log('Socket Connected');
       socket.on('tweets', (data) => {
         console.info(data);
         let newList = [data].concat(items.slice(0, 15));
+        // store.dispatch(tweetAdded({ tweet: newList }));
         setItem(newList);
       });
     });
