@@ -6,7 +6,7 @@ import Loading from '../../components/Loading.component';
 import configureAppStore from '../../store/configureAppStore';
 import { tweetAdded, getFilteredTweets } from '../../store/tweets';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
-import { fetchTweets } from '../store/tweets.js';
+import { fetchTweets } from '../../store/tweets.js';
 
 const port = process.env.REACT_APP_PORT;
 const hostname = 'localhost';
