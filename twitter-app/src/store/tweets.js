@@ -37,5 +37,6 @@ export const fetchTweets = (term) =>
 // Selectors - Memoized Selector - it does not cause multiple re-renders
 export const getFilteredTweets = createSelector(
   (state) => state.entities.tweets,
-  (tweets) => tweets.filter((tweet) => console.log('tweet', tweet))
+  // (tweets) => tweets.filter((tweet) => console.log('tweet', tweet))
+  (tweets) => tweets
 );
