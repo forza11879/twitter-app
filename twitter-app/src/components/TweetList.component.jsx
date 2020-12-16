@@ -7,10 +7,14 @@ import Loading from './Loading.component.jsx';
 import { tweetAdded, getFilteredTweets, fetchTweets } from '../store/tweets.js';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { useDispatch, useSelector } from 'react-redux';
+import { normalize } from 'normalizr';
+import { tweetSchema } from '../store/Schema/tweet.js';
 
 const port = process.env.REACT_APP_PORT;
-const hostname = 'localhost';
+const hostname = process.env.REACT_APP_LOCALHOST;
+
 console.log('port: ', port);
+console.log('localhost: ', hostname);
 
 const urlWebSocket = `ws://${hostname}:${port}`;
 // const url = `http://${hostname}:${port}`;
@@ -23,7 +27,6 @@ function TweetList() {
   const { searchTerm, setSearchTerm } = useState('JavaScript');
   const dispatch = useDispatch();
   //   useSelector(state=>state.entities.bugs.list)
-  const filteredTweets = useSelector(getFilteredTweets);
   const items = useSelector(getFilteredTweets);
 
   //   store.subscribe(() => {
@@ -46,31 +49,14 @@ function TweetList() {
     client.onopen = () => {
       console.log('WebSocket Client Connected');
     };
-
     client.onmessage = (message) => {
       const dataFromServer = JSON.parse(message.data);
-      // console.info(dataFromServer);
-      // let newList = [dataFromServer].concat(this.state.items.slice(0, 15));
-      // console.log('dataFromServer: ', dataFromServer);
-      //  store.dispatch(actions.tweetAdded());
+      // const normalizedData = normalize(dataFromServer, tweetSchema);
       dispatch(tweetAdded(dataFromServer));
-
-      // setCallData((oldArray) => [
-      //   ...oldArray,
-      //   {
-      //     timestamp: Date.now(),
-      //     id: dataFromServer.id,
-      //     duration: dataFromServer.duration,
-      //   },
-      // ]);
+      // console.log('normalizedData: ', normalizedData);
     };
-    // console.log('filteredTweetss: ', filteredTweets);
-    console.log('filteredTweetss: ', items);
-    // if (!filteredTweets) {
-    //   console.log(('filteredTweets Not: ', filteredTweets));
-    // } else {
-    //   setItem(filteredTweets);
-    // }
+
+    // console.log('filteredTweetss: ', items);
   }, [dispatch, items]);
 
   const handleChange = (e) => setSearchTerm(e.target.value);
