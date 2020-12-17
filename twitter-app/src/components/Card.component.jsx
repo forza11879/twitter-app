@@ -1,28 +1,34 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { getTweetById, getUserById } from '../store/tweets.js';
+
 function Card({ data }) {
+  const { user, text, created_at } = useSelector(getTweetById(data));
+  const { profile_image_url, name, screen_name } = useSelector(
+    getUserById(user)
+  );
   return (
     <div>
       <div className="card-panel grey lighten-5 z-depth-3 hoverable thin">
         <div className="row valign-wrapper">
           <div className="col s2">
             <img
-              src={data.user.profile_image_url}
-              alt={data.user.name}
+              src={profile_image_url}
+              alt={name}
               className="circle responsive-img"
             />
           </div>
           <div className="col s10 left-align">
-            <span className="black-text">{data.text}</span>
+            <span className="black-text">{text}</span>
           </div>
         </div>
         <div className="row valign-wrapper right-align chip hoverable">
-          {new Date(data.created_at).toLocaleTimeString()}
+          {new Date(created_at).toLocaleTimeString()}
         </div>
         <div className="row valign-wrapper right-align chip hoverable">
-          <a
-            href={`https://twitter.com/${data.user.screen_name}`}
-            target="_blank"
-          >{`@${data.user.screen_name}`}</a>
+          <a href={`https://twitter.com/${screen_name}`} target="_blank">
+            {`@${screen_name}`}
+          </a>
         </div>
       </div>
     </div>

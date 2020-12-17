@@ -1,7 +1,7 @@
-import Card from './Card.component';
+import Card from './Card.component.jsx';
 // import { CSSTransitionGroup } from 'react-transition-group';
-function ItemsCards({ items }) {
-  return items.map((x, i) => <Card key={i} data={x} />);
+function ItemsCards({ allTweetIds }) {
+  return allTweetIds.map((x, i) => <Card key={i} data={x} />);
 }
 
 export default ItemsCards;

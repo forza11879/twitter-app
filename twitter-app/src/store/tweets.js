@@ -81,7 +81,26 @@ export const fetchTweets = (term) =>
 
 // Selectors - Memoized Selector - it does not cause multiple re-renders
 export const getFilteredTweets = createSelector(
-  (state) => state.entities.tweets,
+  (state) => state.entities.tweets.byTweetId,
   // (tweets) => tweets.filter((tweet) => console.log('tweet', tweet))
-  (tweets) => tweets
+  // if the list of byTweetId and allTweetIds remains the same
+  // resolve function will not recalculate again
+  (byTweetId) => byTweetId
 );
+
+export const getAllTweetIds = createSelector(
+  (state) => state.entities.tweets.allTweetIds,
+  (allTweetIds) => allTweetIds
+);
+
+export const getTweetById = (id) =>
+  createSelector(
+    (state) => state.entities.tweets.byTweetId,
+    (byTweetId) => byTweetId[id]
+  );
+
+export const getUserById = (id) =>
+  createSelector(
+    (state) => state.entities.tweets.byUserId,
+    (byUserId) => byUserId[id]
+  );

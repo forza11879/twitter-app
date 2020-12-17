@@ -3,12 +3,14 @@ import ItemsCards from './ItemsCards.component.jsx';
 import SearchControls from './SearchControls.component.jsx';
 import Controls from './Controls.component.jsx';
 import Loading from './Loading.component.jsx';
-
-import { tweetAdded, getFilteredTweets, fetchTweets } from '../store/tweets.js';
+import {
+  tweetAdded,
+  getFilteredTweets,
+  fetchTweets,
+  getAllTweetIds,
+} from '../store/tweets.js';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { useDispatch, useSelector } from 'react-redux';
-import { normalize } from 'normalizr';
-import { tweetSchema } from '../store/Schema/tweet.js';
 
 const port = process.env.REACT_APP_PORT;
 const hostname = process.env.REACT_APP_LOCALHOST;
@@ -23,27 +25,10 @@ const urlWebSocket = `ws://${hostname}:${port}`;
 const client = new W3CWebSocket(urlWebSocket);
 
 function TweetList() {
-  // const { items, setItem } = useState([]);
   const { searchTerm, setSearchTerm } = useState('JavaScript');
   const dispatch = useDispatch();
-  //   useSelector(state=>state.entities.bugs.list)
-  const items = useSelector(getFilteredTweets);
-
-  //   store.subscribe(() => {
-  //     console.log('store changed');
-  //   });
-  //   const state = store.getState();
-  // const filteredTweets = getFilteredTweets(state);
-  // store.dispatch(actions.tweetAdded());
-  // store.dispatch(
-  //   actions.apiCallBegan({
-  //     url: '/tweets',
-  //     method: 'get',
-  //     // data: {}, // data to send to the server
-  //     onSuccess: actions.apiCallSuccess.type,
-  //     onError: actions.apiCallFailed.type,
-  //   })
-  // );
+  const filteredTweet = useSelector(getFilteredTweets);
+  const allTweetIds = useSelector(getAllTweetIds);
 
   useEffect(() => {
     client.onopen = () => {
@@ -51,13 +36,9 @@ function TweetList() {
     };
     client.onmessage = (message) => {
       const dataFromServer = JSON.parse(message.data);
-      // const normalizedData = normalize(dataFromServer, tweetSchema);
       dispatch(tweetAdded(dataFromServer));
-      // console.log('normalizedData: ', normalizedData);
     };
-
-    // console.log('filteredTweetss: ', items);
-  }, [dispatch, items]);
+  }, [dispatch]);
 
   const handleChange = (e) => setSearchTerm(e.target.value);
   const handleKeyPress = (e) => {
@@ -85,29 +66,34 @@ function TweetList() {
       },
     });
   };
+
   return (
     <div className="row">
       <div className="col s12 m4 l4">
         <div className="input-field col s12">
-          <SearchControls
+          {/* <SearchControls
             searchTerm={searchTerm}
             handleKeyPress={handleKeyPress}
             handleChange={handleChange}
-          />
+          /> */}
 
-          {items.length > 0 ? (
+          {/* {items.length > 0 ? (
             <Controls
               items={items}
               controlStyle={controlStyle}
               handleResume={handleResume}
               handlePause={handlePause}
             />
-          ) : null}
+          ) : null} */}
         </div>
       </div>
       <div className="col s12 m4 l4">
         <div>
-          {items.length > 0 ? <ItemsCards items={items} /> : <Loading />}
+          {allTweetIds.length > 0 ? (
+            <ItemsCards allTweetIds={allTweetIds} />
+          ) : (
+            <Loading />
+          )}
         </div>
       </div>
       <div className="col s12 m4 l4"></div>

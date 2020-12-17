@@ -1,4 +1,4 @@
-import FilterControls from './FilterControls.component';
+import FilterControls from './FilterControls.component.jsx';
 
 function Controls({ items, controlStyle, handleResume, handlePause }) {
   return (
