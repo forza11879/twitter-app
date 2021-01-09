@@ -1,11 +1,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { getTweetById, getUserById } from '../store/tweets.js';
+import { selectTweetById, selectUserById } from '../store/tweets.js';
 
 function Card({ data }) {
-  const { user, text, created_at } = useSelector(getTweetById(data));
+  const { user, text, created_at } = useSelector(selectTweetById(data));
   const { profile_image_url, name, screen_name } = useSelector(
-    getUserById(user)
+    selectUserById(user)
   );
   return (
     <div>

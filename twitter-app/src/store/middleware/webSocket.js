@@ -1,14 +1,15 @@
 import * as actions from '../api.js';
 
 export const webSocket = ({ dispatch }) => (next) => async (action) => {
-  if (action.type !== actions.apiCallBegan) return next(action);
+  if (action.type !== actions.webSocketCallBegan) return next(action);
   next(action); // 'apiCallBegan' to show in redux dev tools
   const { socket, onSuccess, onError } = action.payload;
+  console.log('websocket: ', socket);
   const client = JSON.parse(socket);
   console.log('websocket client: ', client);
   try {
     client.onopen = () => {
-      console.log('WebSocket Client Connected');
+      console.log('WebSocket Client Connectedd');
     };
 
     client.onmessage = (message) => {

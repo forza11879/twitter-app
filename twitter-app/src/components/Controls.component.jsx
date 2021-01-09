@@ -1,9 +1,9 @@
 import FilterControls from './FilterControls.component.jsx';
 
-function Controls({ items, controlStyle, handleResume, handlePause }) {
+function Controls({ allTweetIds, controlStyle, handleResume, handlePause }) {
   return (
     <div>
-      {items.length > 0 ? (
+      {allTweetIds.length > 0 ? (
         <FilterControls
           controlStyle={controlStyle}
           handleResume={handleResume}
