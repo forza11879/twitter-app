@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ItemsCards from './ItemsCards.component.jsx';
-import SearchControls from './SearchControls.component.jsx';
 import SearchForm from './form/Search-form.component';
 import Controls from './Controls.component.jsx';
 import Loading from './Loading.component.jsx';
+import Pagination from './Pagination.component';
 import {
   tweetAdded,
   tweetStoreReseted,
@@ -15,6 +15,7 @@ import {
 } from '../store/tweets.js';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { useDispatch, useSelector } from 'react-redux';
+import notify from './toastify.js';
 
 const port = process.env.REACT_APP_PORT;
 const hostname = process.env.REACT_APP_LOCALHOST;
@@ -30,6 +31,9 @@ const client = new W3CWebSocket(urlWebSocket);
 // console.log('web socket client: ', client);
 
 function TweetList() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(4);
+
   const initialValue = {
     text: '',
   };
@@ -51,14 +55,6 @@ function TweetList() {
       dispatch(tweetAdded(dataFromServer));
     };
   }, [dispatch]);
-
-  // const handleChange = (e) => setSearchTerm(e.target.value);
-  // const handleChange = (newProps) => {
-  //   setSearchTerm((prevState) => ({
-  //     ...prevState,
-  //     ...newProps,
-  //   }));
-  // };
 
   const handleChange = (newProps) => {
     console.log('newPros: ', newProps);
@@ -97,17 +93,21 @@ function TweetList() {
         'Content-Type': 'application/json',
       },
     });
+    notify('pause');
   };
+
+  // Get current posts
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = allTweetIds.slice(indexOfFirstPost, indexOfLastPost);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="row">
       <div className="col s12 m4 l4">
         <div className="input-field col s12">
-          {/* <SearchControls
-            searchTerm={searchTerm}
-            handleKeyPress={handleKeyPress}
-            handleChange={handleChange}
-          /> */}
           <SearchForm
             initialValues={searchTerm}
             handleKeyPress={handleKeyPress}
@@ -128,10 +128,17 @@ function TweetList() {
       <div className="col s12 m4 l4">
         <div>
           {allTweetIds.length > 0 ? (
-            <ItemsCards allTweetIds={allTweetIds} />
+            <ItemsCards allTweetIds={currentPosts} />
           ) : (
             <Loading />
           )}
+        </div>
+        <div>
+          <Pagination
+            postsPerPage={postsPerPage}
+            totalPosts={allTweetIds.length}
+            paginate={paginate}
+          />
         </div>
       </div>
       <div className="col s12 m4 l4"></div>

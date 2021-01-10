@@ -2,8 +2,10 @@ import React from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import FormikControl from './formik-control.js';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-// import './form.styles.css';
+toast.configure();
 
 function SearchForm(props) {
   const { initialValues, handleChange, handleResume } = props;
@@ -11,6 +13,10 @@ function SearchForm(props) {
   const validationSchema = Yup.object({
     text: Yup.string().required('Required'),
   });
+
+  const notify = () => {
+    toast.success('Search request was sent');
+  };
 
   const onSubmit = (values) => {
     const { text } = values;
@@ -35,7 +41,12 @@ function SearchForm(props) {
               label="Search"
               name="text"
             />
-            <button type="submit" disabled={!formik.isValid}>
+            <button
+              className="waves-effect waves-light btn"
+              type="submit"
+              disabled={!formik.isValid}
+              onClick={notify}
+            >
               Search
             </button>
           </Form>
@@ -46,17 +57,3 @@ function SearchForm(props) {
 }
 
 export default SearchForm;
-
-{
-  /* <div>
-  <input
-    id="email"
-    type="text"
-    className="validate"
-    value={searchTerm}
-    onKeyPress={handleKeyPress}
-    onChange={handleChange}
-  />
-  <label htmlFor="email">Search</label>
-</div>; */
-}
