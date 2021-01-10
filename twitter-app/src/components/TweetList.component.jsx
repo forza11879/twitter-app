@@ -8,10 +8,7 @@ import {
   tweetAdded,
   tweetStoreReseted,
   fetchTweets,
-  fetchTweetsWebSocket,
-  fetchTweetsPause,
   selectAllTweetIds,
-  selectFilteredTweets,
 } from '../store/tweets.js';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { useDispatch, useSelector } from 'react-redux';
@@ -39,14 +36,11 @@ function TweetList() {
   };
 
   const [searchTerm, setSearchTerm] = useState(initialValue);
-  // const [searchTerm, setSearchTerm] = useState('');
+
   const dispatch = useDispatch();
-  const filteredTweet = useSelector(selectFilteredTweets);
   const allTweetIds = useSelector(selectAllTweetIds);
 
   useEffect(() => {
-    // dispatch(fetchTweetsWebSocket(JSON.stringify(client)));
-
     client.onopen = () => {
       console.log('WebSocket Client Connected');
     };
@@ -56,24 +50,8 @@ function TweetList() {
     };
   }, [dispatch]);
 
-  const handleChange = (newProps) => {
-    console.log('newPros: ', newProps);
-    // setSearchTerm({
-    //   ...newProps,
-    //   // text: newProps,
-    // });
-    setSearchTerm(newProps);
-    console.log('searchTerm: ', searchTerm);
-  };
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      // handleResume();
-      console.log('term: ', searchTerm);
-    }
-  };
   const handleResume = (term) => {
     dispatch(tweetStoreReseted());
-    // let term = searchTerm;
     console.log('term: ', term);
     // dispatch(fetchTweets(term));
     fetch(`http://localhost:3000/setsearchterm/${term}`, {
@@ -108,20 +86,10 @@ function TweetList() {
     <div className="row">
       <div className="col s12 m4 l4">
         <div className="input-field col s12">
-          <SearchForm
-            initialValues={searchTerm}
-            handleKeyPress={handleKeyPress}
-            handleChange={handleChange}
-            handleResume={handleResume}
-          />
+          <SearchForm initialValues={searchTerm} handleResume={handleResume} />
 
           {allTweetIds.length > 0 ? (
-            <Controls
-              allTweetIds={allTweetIds}
-              controlStyle={controlStyle}
-              handleResume={handleResume}
-              handlePause={handlePause}
-            />
+            <Controls allTweetIds={allTweetIds} handlePause={handlePause} />
           ) : null}
         </div>
       </div>
@@ -146,8 +114,8 @@ function TweetList() {
   );
 }
 
-const controlStyle = {
-  marginRight: '5px',
-};
+// const controlStyle = {
+//   marginRight: '5px',
+// };
 
 export default TweetList;

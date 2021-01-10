@@ -1,4 +1,4 @@
-function filterControls({ controlStyle, handleResume, handlePause }) {
+function filterControls({ handlePause }) {
   return (
     <div>
       <a

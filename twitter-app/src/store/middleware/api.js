@@ -3,10 +3,8 @@ import * as actions from '../api.js';
 
 const api = ({ dispatch }) => (next) => async (action) => {
   if (action.type !== actions.apiCallBegan) return next(action);
-  // const { onSuccess, onError, greeting } = action.payload;
-  // console.log('greeting: ', greeting);
   next(action); // 'apiCallBegan' to show in redux dev tools
-  const { url, method, headers, onSuccess, onError, greeting } = action.payload;
+  const { url, method, onSuccess, onError } = action.payload;
 
   // console.log('greeting: ', greeting);
   try {

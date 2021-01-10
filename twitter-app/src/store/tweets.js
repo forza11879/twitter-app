@@ -1,11 +1,5 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-import {
-  apiCallBegan,
-  apiCallSuccess,
-  apiCallFailed,
-  // webSocketCallBegan,
-  // webSocketCallFailed,
-} from './api.js';
+import { apiCallBegan, apiCallSuccess, apiCallFailed } from './api.js';
 import { normalize } from 'normalizr';
 import { tweetSchema } from '../store/Schema/tweet.js';
 
@@ -21,22 +15,16 @@ const slice = createSlice({
   initialState: initialState(),
   // reducers
   reducers: {
-    // action => action handlers(no async api calls inside reducers just get the current state and return a new state. no side effects, no api calls, no DOM manipulations, no state mutations). This will make our reducers really easy to test. Code with the side effects should be put into action creators.
-    // notion of the (action creater - command) - (event - reducer)
-    //                                 addTweet - tweetAdded
-    // UI layer should receive only notions of the command ex: addTweet (action creator - command)
-    // notion of the event (tweetAdded - should not be exported) should used in the implementation inside the Action creator
     tweetAdded: (state, action) => {
-      // const normalizedData = normalize(action.payload, tweetSchema);
       const { entities, result } = normalize(action.payload, tweetSchema);
       Object.assign(state.byTweetId, entities.byTweetId);
       Object.assign(state.byUserId, entities.byUserId);
       state.allTweetIds.push(result);
     },
-    tweetPauseReceived: (state, action) => {
-      // console.log('action.payload', action.payload);
-      console.log('tweetPauseReceived:', action.payload.description);
-    },
+    // tweetPauseReceived: (state, action) => {
+    //   // console.log('action.payload', action.payload);
+    //   console.log('tweetPauseReceived:', action.payload.description);
+    // },
 
     tweetStoreReseted: (state) => initialState(),
   },
@@ -63,25 +51,15 @@ export const fetchTweets = (term) =>
 
 export const fetchTweetsPause = () =>
   apiCallBegan({
-    greeting: 'Hello',
-    // url: '/pause',
-    // method: 'GET',
-    // headers: {
-    //   'Content-Type': 'application/json',
-    // },
-    // data: JSON.stringify({ term }), // data to send to the server
+    url: 'http://localhost:3000/pause',
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     onSuccess: tweetPauseReceived.type,
     // onSuccess: apiCallSuccess.type,
     onError: apiCallFailed.type,
   });
-
-// export const fetchTweetsWebSocket = (client) =>
-//   webSocketCallBegan({
-//     socket: client,
-//     onSuccess: tweetAdded.type,
-//     // onSuccess: apiCallSuccess.type,
-//     onError: webSocketCallFailed.type,
-//   });
 
 const allTweetIdsSelector = (state) => state.entities.tweets.allTweetIds;
 const byTweetIdSelector = (state) => state.entities.tweets.byTweetId;
@@ -105,10 +83,3 @@ export const selectTweetById = (id) =>
 
 export const selectUserById = (id) =>
   createSelector(byUserIdSelector, (byUserId) => byUserId[id]);
-
-// export const getUserById = (id) =>
-//   createSelector(
-//     getTweetById(id),
-//     byUserIdSelector,
-//     (UserId, byUserId) => byUserId[UserId]
-//   );

@@ -4,14 +4,3 @@ import entitiesReducer from './entities';
 export default combineReducers({
   entities: entitiesReducer,
 });
-
-// const reducer = (state, action) => {
-//   if (action.type === 'tweets/resetTweetStore') {
-//     state = undefined;
-//   }
-//   return combineReducers({
-//     entities: entitiesReducer,
-//   });
-// };
-
-// export default reducer;

@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 toast.configure();
 
 function SearchForm(props) {
-  const { initialValues, handleChange, handleResume } = props;
+  const { initialValues, handleResume } = props;
 
   const validationSchema = Yup.object({
     text: Yup.string().required('Required'),
@@ -21,8 +21,6 @@ function SearchForm(props) {
   const onSubmit = (values) => {
     const { text } = values;
     console.log('text on submit: ', text);
-    // handleChange({ text });
-    // handleChange({ text });
     handleResume(text);
   };
 
