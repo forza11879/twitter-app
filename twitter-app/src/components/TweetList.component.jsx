@@ -8,6 +8,7 @@ import {
   tweetAdded,
   tweetStoreReseted,
   fetchTweets,
+  fetchTweetsPause,
   selectAllTweetIds,
 } from '../store/tweets.js';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
@@ -53,24 +54,24 @@ function TweetList() {
   const handleResume = (term) => {
     dispatch(tweetStoreReseted());
     console.log('term: ', term);
-    // dispatch(fetchTweets(term));
-    fetch(`http://localhost:3000/setsearchterm/${term}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      // body: JSON.stringify({ term }),
-    });
+    dispatch(fetchTweets(term));
+    // fetch(`http://localhost:3000/setsearchterm/${term}`, {
+    //   method: 'GET',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   // body: JSON.stringify({ term }),
+    // });
   };
 
   const handlePause = () => {
-    // dispatch(fetchTweetsPause());
-    fetch('http://localhost:3000/pause', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    dispatch(fetchTweetsPause());
+    // fetch('http://localhost:3000/pause', {
+    //   method: 'GET',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // });
     notify('pause');
   };
 
@@ -113,9 +114,5 @@ function TweetList() {
     </div>
   );
 }
-
-// const controlStyle = {
-//   marginRight: '5px',
-// };
 
 export default TweetList;

@@ -21,10 +21,11 @@ const slice = createSlice({
       Object.assign(state.byUserId, entities.byUserId);
       state.allTweetIds.push(result);
     },
-    // tweetPauseReceived: (state, action) => {
-    //   // console.log('action.payload', action.payload);
-    //   console.log('tweetPauseReceived:', action.payload.description);
-    // },
+    tweetPauseReceived: (state, action) => {
+      // console.log('action.payload', action.payload);
+      console.log('tweetPauseReceived:', action.payload);
+      // console.log('tweetPauseReceived');
+    },
 
     tweetStoreReseted: (state) => initialState(),
   },
@@ -41,21 +42,20 @@ export default slice.reducer;
 // Action creators
 export const fetchTweets = (term) =>
   apiCallBegan({
-    url: `http://localhost:3000/setsearchterm/${term}`,
+    url: `/setsearchterm/${term}`,
     method: 'get',
     // data: JSON.stringify({ term }), // data to send to the server
-    // onSuccess: tweetReceived.type,
     onSuccess: apiCallSuccess.type,
     onError: apiCallFailed.type,
   });
 
 export const fetchTweetsPause = () =>
   apiCallBegan({
-    url: 'http://localhost:3000/pause',
+    url: '/pause',
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    // headers: {
+    //   'Content-Type': 'application/json',
+    // },
     onSuccess: tweetPauseReceived.type,
     // onSuccess: apiCallSuccess.type,
     onError: apiCallFailed.type,

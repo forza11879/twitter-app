@@ -2,33 +2,24 @@ import axios from 'axios';
 import * as actions from '../api.js';
 
 const api = ({ dispatch }) => (next) => async (action) => {
-  if (action.type !== actions.apiCallBegan) return next(action);
+  if (action.type !== actions.apiCallBegan.type) return next(action);
   next(action); // 'apiCallBegan' to show in redux dev tools
   const { url, method, onSuccess, onError } = action.payload;
 
-  // console.log('greeting: ', greeting);
+  const baseURL = process.env.REACT_APP_BASE_URL;
+  console.log('baseURL: ', baseURL);
   try {
-    // const response = await axios.request({
-    //   baseURL: 'http://localhost:3000',
-    //   url,
-    //   method,
-    //   // headers,
-    //   // data,
-    // });
-    const response = await fetch(url, {
+    const response = await axios.request({
+      baseURL: process.env.REACT_APP_BASE_URL,
+      url,
       method,
       // headers,
+      // data,
     });
-    console.log('response: ', response.json());
-    // console.log('response: ', response.data);
     // General
     // dispatch(actions.apiCallSuccess(response.data));
-    // dispatch(actions.apiCallSuccess(greeting));
     // Specific
-    if (onSuccess) dispatch({ type: onSuccess, payload: response.json() });
-    // if (onSuccess) dispatch({ type: onSuccess, payload: response.data });
-    // if (onSuccess)
-    //   dispatch({ type: onSuccess, payload: { description: greeting } });
+    if (onSuccess) dispatch({ type: onSuccess, payload: response.data });
   } catch (error) {
     // General
     // dispatch(actions.apiCallFailed(error));
