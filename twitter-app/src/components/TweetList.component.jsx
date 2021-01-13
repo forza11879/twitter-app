@@ -55,23 +55,10 @@ function TweetList() {
     dispatch(tweetStoreReseted());
     console.log('term: ', term);
     dispatch(fetchTweets(term));
-    // fetch(`http://localhost:3000/setsearchterm/${term}`, {
-    //   method: 'GET',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   // body: JSON.stringify({ term }),
-    // });
   };
 
   const handlePause = () => {
     dispatch(fetchTweetsPause());
-    // fetch('http://localhost:3000/pause', {
-    //   method: 'GET',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // });
     notify('pause');
   };
 
