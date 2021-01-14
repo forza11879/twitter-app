@@ -9,11 +9,11 @@ import {
   tweetStoreReseted,
   fetchTweets,
   fetchTweetsPause,
+  getNotify,
   selectAllTweetIds,
 } from '../store/tweets.js';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { useDispatch, useSelector } from 'react-redux';
-import notify from './toastify.js';
 
 const port = process.env.REACT_APP_PORT;
 const hostname = process.env.REACT_APP_LOCALHOST;
@@ -59,7 +59,8 @@ function TweetList() {
 
   const handlePause = () => {
     dispatch(fetchTweetsPause());
-    notify('pause');
+    // dispatch(getNotify());
+    // notify('pause');
   };
 
   // Get current posts

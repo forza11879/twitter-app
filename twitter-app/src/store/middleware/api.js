@@ -1,5 +1,5 @@
 import axios from 'axios';
-import * as actions from '../api.js';
+import * as actions from '../action/api.js';
 
 const port = process.env.REACT_APP_PORT;
 const hostname = process.env.REACT_APP_LOCALHOST;

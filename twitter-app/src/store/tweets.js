@@ -1,7 +1,8 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-import { apiCallBegan, apiCallSuccess, apiCallFailed } from './api.js';
+import { apiCallBegan, apiCallSuccess, apiCallFailed } from './action/api.js';
 import { normalize } from 'normalizr';
 import { tweetSchema } from '../store/Schema/tweet.js';
+import notify from './toastify.js';
 
 const initialState = () => ({
   byTweetId: {},
@@ -22,9 +23,12 @@ const slice = createSlice({
       state.allTweetIds.push(result);
     },
     tweetPauseReceived: (state, action) => {
-      // console.log('action.payload', action.payload);
       console.log('tweetPauseReceived:', action.payload);
-      // console.log('tweetPauseReceived');
+      notify('success', 'Fetch request was paused');
+    },
+    fetchTweetsReceived: (state, action) => {
+      console.log('fetchTweetsReceived:', action.payload);
+      notify('success', 'Search request was sent');
     },
 
     tweetStoreReseted: (state) => initialState(),
@@ -36,6 +40,7 @@ export const {
   tweetReceived,
   tweetPauseReceived,
   tweetStoreReseted,
+  fetchTweetsReceived,
 } = slice.actions;
 export default slice.reducer;
 
@@ -45,6 +50,7 @@ export const fetchTweets = (term) =>
     url: `/setsearchterm/${term}`,
     method: 'get',
     // data: JSON.stringify({ term }), // data to send to the server
+    // onSuccess: fetchTweetsReceived.type,
     onSuccess: apiCallSuccess.type,
     onError: apiCallFailed.type,
   });
@@ -56,8 +62,8 @@ export const fetchTweetsPause = () =>
     // headers: {
     //   'Content-Type': 'application/json',
     // },
-    onSuccess: tweetPauseReceived.type,
-    // onSuccess: apiCallSuccess.type,
+    // onSuccess: tweetPauseReceived.type,
+    onSuccess: apiCallSuccess.type,
     onError: apiCallFailed.type,
   });
 
