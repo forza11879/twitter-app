@@ -59,8 +59,6 @@ function TweetList() {
 
   const handlePause = () => {
     dispatch(fetchTweetsPause());
-    // dispatch(getNotify());
-    // notify('pause');
   };
 
   // Get current posts

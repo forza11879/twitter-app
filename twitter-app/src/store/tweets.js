@@ -2,7 +2,6 @@ import { createSlice, createSelector } from '@reduxjs/toolkit';
 import { apiCallBegan, apiCallSuccess, apiCallFailed } from './action/api.js';
 import { normalize } from 'normalizr';
 import { tweetSchema } from '../store/Schema/tweet.js';
-import notify from './toastify.js';
 
 const initialState = () => ({
   byTweetId: {},
@@ -24,11 +23,9 @@ const slice = createSlice({
     },
     tweetPauseReceived: (state, action) => {
       console.log('tweetPauseReceived:', action.payload);
-      notify('success', 'Fetch request was paused');
     },
     fetchTweetsReceived: (state, action) => {
       console.log('fetchTweetsReceived:', action.payload);
-      notify('success', 'Search request was sent');
     },
 
     tweetStoreReseted: (state) => initialState(),
