@@ -9,8 +9,8 @@ import {
   tweetStoreReseted,
   fetchTweets,
   fetchTweetsPause,
-  getNotify,
   selectAllTweetIds,
+  getTweet,
 } from '../store/tweets.js';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { useDispatch, useSelector } from 'react-redux';
@@ -46,8 +46,9 @@ function TweetList() {
       console.log('WebSocket Client Connected');
     };
     client.onmessage = (message) => {
-      const dataFromServer = JSON.parse(message.data);
-      dispatch(tweetAdded(dataFromServer));
+      // const dataFromServer = JSON.parse(message.data);
+      // dispatch(tweetAdded(dataFromServer));
+      dispatch(getTweet(message.data));
     };
   }, [dispatch]);
 

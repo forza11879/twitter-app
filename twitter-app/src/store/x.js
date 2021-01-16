@@ -50,3 +50,30 @@ const store = compose(
 sagaMiddleware.run(rootSaga);
 
 export default store;
+
+import { createSlice } from '@reduxjs/toolkit';
+import { normalize } from 'normalizr';
+import { tweetSchema } from '../store/Schema/tweet.js';
+
+const initialState = () => ({
+  byTweetId: {},
+  byUserId: {},
+  allTweetIds: [],
+});
+
+// action, actionTypes and reducer
+const slice = createSlice({
+  name: 'tweets',
+  initialState: initialState(),
+  // reducers
+  reducers: {
+    tweetAdded: (state, action) => {
+      const { entities, result } = normalize(action.payload, tweetSchema);
+      Object.assign(state.byTweetId, entities.byTweetId);
+      // {...state.byTweetId, ...entities.byTweetId};
+      Object.assign(state.byUserId, entities.byUserId);
+      // {...state.byUserId, ...entities.byUserId};
+      state.allTweetIds.push(result);
+    },
+  },
+});

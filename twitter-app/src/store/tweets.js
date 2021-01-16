@@ -1,5 +1,6 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
 import { apiCallBegan, apiCallSuccess, apiCallFailed } from './action/api.js';
+import { webSocketCallBegan } from './action/websocket.js';
 import { normalize } from 'normalizr';
 import { tweetSchema } from '../store/Schema/tweet.js';
 
@@ -64,6 +65,13 @@ export const fetchTweetsPause = () =>
     onError: apiCallFailed.type,
   });
 
+export const getTweet = (message) =>
+  webSocketCallBegan({
+    message: message,
+    onSuccess: tweetAdded.type,
+    // onError: apiCallFailed.type,
+  });
+
 const allTweetIdsSelector = (state) => state.entities.tweets.allTweetIds;
 const byTweetIdSelector = (state) => state.entities.tweets.byTweetId;
 const byUserIdSelector = (state) => state.entities.tweets.byUserId;
@@ -86,3 +94,9 @@ export const selectTweetById = (id) =>
 
 export const selectUserById = (id) =>
   createSelector(byUserIdSelector, (byUserId) => byUserId[id]);
+
+// action => action handlers(no async api calls inside reducers just get the current state and return a new state. no side effects, no api calls, no DOM manipulations, no state mutations). This will make our reducers really easy to test. Code with the side effects should be put into action creators.
+// notion of the (action creater - command) - (event - reducer)
+//                                 addTweet - tweetAdded
+// UI layer should receive only notions of the command ex: addTweet (action creator - command)
+// notion of the event (tweetAdded - should not be exported) should used in the implementation inside the Action creator
