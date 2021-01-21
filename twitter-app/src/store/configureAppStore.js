@@ -5,21 +5,38 @@ import toast from './middleware/toast.js';
 import websocket from './middleware/websocket.js';
 import createSagaMiddleware from 'redux-saga';
 import tweetSagas from '../saga/tweet.js';
-
-const sagaMiddleware = createSagaMiddleware();
-const middlewares = [sagaMiddleware, websocket, toast];
-// const middlewares = [api, websocket, toast];
-const middleware = [...getDefaultMiddleware({ thunk: false }), ...middlewares];
-// const middleware = [...getDefaultMiddleware(), ...middlewares];
+// import { createStore, applyMiddleware, compose } from 'redux';
+// import { initialState } from './tweets.js';
 
 const configureAppStore = () => {
-  // reduxjs/toolkit configureStore enables to dispatch async actions
-  return configureStore({
+  const sagaMiddleware = createSagaMiddleware();
+
+  const middlewares = [sagaMiddleware, websocket, toast];
+  const middleware = [
+    ...getDefaultMiddleware({ thunk: false }),
+    ...middlewares,
+  ];
+
+  const store = configureStore({
     reducer: reducer,
     middleware: middleware,
   });
+
+  sagaMiddleware.run(tweetSagas);
+
+  return store;
 };
 
-sagaMiddleware.run(tweetSagas);
-
 export default configureAppStore;
+
+// const configureAppStore = compose(
+//   applyMiddleware(websocket, toast, sagaMiddleware),
+//   window.devToolsExtension && window.devToolsExtension(),
+//   // sagaMiddleware.run
+// )(createStore)(reducer);
+
+// const middlewares = [sagaMiddleware, websocket, toast];
+// const middleware = [...getDefaultMiddleware({ thunk: false }), ...middlewares];
+
+// const middlewares = [api, websocket, toast];
+// const middleware = [...getDefaultMiddleware(), ...middlewares];

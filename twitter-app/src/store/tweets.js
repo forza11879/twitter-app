@@ -9,7 +9,7 @@ import { webSocketCallBegan, webSocketCallFailed } from './action/websocket.js';
 import { normalize } from 'normalizr';
 import { tweetSchema } from '../store/Schema/tweet.js';
 
-const initialState = () => ({
+export const initialState = () => ({
   byTweetId: {},
   byUserId: {},
   allTweetIds: [],
