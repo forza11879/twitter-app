@@ -1,57 +1,10 @@
-import { call, put, takeEvery } from 'redux-saga/effects';
-
-const apiUrl = `https://jsonplaceholder.typicode.com/users`;
-function getApi() {
-  return fetch(apiUrl, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((response) => response.json())
-    .catch((error) => {
-      throw error;
-    });
-}
-
-function* fetchUsers(action) {
-  try {
-    const users = yield call(getApi);
-    yield put({ type: 'GET_USERS_SUCCESS', users: users });
-  } catch (e) {
-    yield put({ type: 'GET_USERS_FAILED', message: e.message });
-  }
-}
-
-function* userSaga() {
-  yield takeEvery('GET_USERS_REQUESTED', fetchUsers);
-}
-
-export default userSaga;
-
-import { all } from 'redux-saga/effects';
-import userSaga from './userSaga';
-
-export default function* rootSaga() {
-  yield all([userSaga()]);
-}
-
-import { createStore, applyMiddleware, compose } from 'redux';
-import createSagaMiddleware from 'redux-saga';
-import rootReducer from './reducers/index.js';
-import rootSaga from './sagas/index';
-
-const sagaMiddleware = createSagaMiddleware();
-const store = compose(
-  applyMiddleware(sagaMiddleware),
-  window.devToolsExtension && window.devToolsExtension()
-)(createStore)(rootReducer);
-
-sagaMiddleware.run(rootSaga);
-
-export default store;
-
 import { createSlice } from '@reduxjs/toolkit';
+import {
+  sagaApiCallBegan,
+  sagaApiCallSuccess,
+  sagaApiCallFailed,
+} from './action/saga';
+import { webSocketCallBegan, webSocketCallFailed } from './action/websocket.js';
 import { normalize } from 'normalizr';
 import { tweetSchema } from '../store/Schema/tweet.js';
 
@@ -70,10 +23,36 @@ const slice = createSlice({
     tweetAdded: (state, action) => {
       const { entities, result } = normalize(action.payload, tweetSchema);
       Object.assign(state.byTweetId, entities.byTweetId);
-      // {...state.byTweetId, ...entities.byTweetId};
       Object.assign(state.byUserId, entities.byUserId);
-      // {...state.byUserId, ...entities.byUserId};
       state.allTweetIds.push(result);
     },
+    tweetStoreReseted: (state) => initialState(),
   },
 });
+
+export const { tweetAdded, tweetStoreReseted } = slice.actions;
+export default slice.reducer;
+
+// Action creators
+export const fetchTweets = (term) =>
+  sagaApiCallBegan({
+    url: `/setsearchterm/${term}`,
+    method: 'get',
+    onSuccess: sagaApiCallSuccess.type,
+    onError: sagaApiCallFailed.type,
+  });
+
+export const fetchTweetsPause = () =>
+  sagaApiCallBegan({
+    url: '/pause',
+    method: 'GET',
+    onSuccess: sagaApiCallSuccess.type,
+    onError: sagaApiCallFailed.type,
+  });
+
+export const getTweet = (message) =>
+  webSocketCallBegan({
+    message: message,
+    onSuccess: tweetAdded.type,
+    onError: webSocketCallFailed.type,
+  });

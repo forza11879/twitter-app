@@ -1,6 +1,11 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
 import { apiCallBegan, apiCallSuccess, apiCallFailed } from './action/api.js';
-import { webSocketCallBegan } from './action/websocket.js';
+import {
+  sagaApiCallBegan,
+  sagaApiCallSuccess,
+  sagaApiCallFailed,
+} from './action/saga';
+import { webSocketCallBegan, webSocketCallFailed } from './action/websocket.js';
 import { normalize } from 'normalizr';
 import { tweetSchema } from '../store/Schema/tweet.js';
 
@@ -43,33 +48,51 @@ export const {
 export default slice.reducer;
 
 // Action creators
+// export const fetchTweets = (term) =>
+//   apiCallBegan({
+//     url: `/setsearchterm/${term}`,
+//     method: 'get',
+//     // data: JSON.stringify({ term }), // data to send to the server
+//     onSuccess: apiCallSuccess.type,
+//     onError: apiCallFailed.type,
+//   });
+
 export const fetchTweets = (term) =>
-  apiCallBegan({
+  sagaApiCallBegan({
     url: `/setsearchterm/${term}`,
     method: 'get',
     // data: JSON.stringify({ term }), // data to send to the server
-    // onSuccess: fetchTweetsReceived.type,
-    onSuccess: apiCallSuccess.type,
-    onError: apiCallFailed.type,
+    onSuccess: sagaApiCallSuccess.type,
+    onError: sagaApiCallFailed.type,
   });
 
+// export const fetchTweetsPause = () =>
+//   apiCallBegan({
+//     url: '/pause',
+//     method: 'GET',
+//     // headers: {
+//     //   'Content-Type': 'application/json',
+//     // },
+//     onSuccess: apiCallSuccess.type,
+//     onError: apiCallFailed.type,
+//   });
+
 export const fetchTweetsPause = () =>
-  apiCallBegan({
+  sagaApiCallBegan({
     url: '/pause',
     method: 'GET',
     // headers: {
     //   'Content-Type': 'application/json',
     // },
-    // onSuccess: tweetPauseReceived.type,
-    onSuccess: apiCallSuccess.type,
-    onError: apiCallFailed.type,
+    onSuccess: sagaApiCallSuccess.type,
+    onError: sagaApiCallFailed.type,
   });
 
 export const getTweet = (message) =>
   webSocketCallBegan({
     message: message,
     onSuccess: tweetAdded.type,
-    // onError: apiCallFailed.type,
+    onError: webSocketCallFailed.type,
   });
 
 const allTweetIdsSelector = (state) => state.entities.tweets.allTweetIds;

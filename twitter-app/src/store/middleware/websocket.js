@@ -1,6 +1,6 @@
 import * as actions from '../action/websocket.js';
 
-const websocket = ({ dispatch }) => (next) => async (action) => {
+const websocket = ({ dispatch }) => (next) => (action) => {
   if (action.type !== actions.webSocketCallBegan.type) return next(action);
   next(action); // 'apiCallBegan' to show in redux dev tools
   const { message, onSuccess, onError } = action.payload;

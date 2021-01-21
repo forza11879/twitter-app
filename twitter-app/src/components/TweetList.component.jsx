@@ -5,7 +5,6 @@ import Controls from './Controls.component.jsx';
 import Loading from './Loading.component.jsx';
 import Pagination from './Pagination.component';
 import {
-  tweetAdded,
   tweetStoreReseted,
   fetchTweets,
   fetchTweetsPause,
@@ -46,8 +45,6 @@ function TweetList() {
       console.log('WebSocket Client Connected');
     };
     client.onmessage = (message) => {
-      // const dataFromServer = JSON.parse(message.data);
-      // dispatch(tweetAdded(dataFromServer));
       dispatch(getTweet(message.data));
     };
   }, [dispatch]);
