@@ -57,7 +57,7 @@ export default slice.reducer;
 //     onError: apiCallFailed.type,
 //   });
 
-export const fetchTweets = (term) =>
+export const setTweetTerm = (term) =>
   sagaApiCallBegan({
     url: `/setsearchterm/${term}`,
     method: 'get',

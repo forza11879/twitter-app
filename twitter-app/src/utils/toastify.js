@@ -3,7 +3,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 toast.configure();
 
-const notify = (type, message) => {
+const notify = ({ type, message }) => {
   switch (type) {
     case 'success':
       toast.success(message);

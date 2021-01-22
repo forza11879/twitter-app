@@ -6,13 +6,14 @@ import Loading from './Loading.component.jsx';
 import Pagination from './Pagination.component';
 import {
   tweetStoreReseted,
-  fetchTweets,
+  setTweetTerm,
   fetchTweetsPause,
   selectAllTweetIds,
   getTweet,
 } from '../store/tweets.js';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { useDispatch, useSelector } from 'react-redux';
+// import { setTweetTerm } from '../store/action/saga.js';
 
 const port = process.env.REACT_APP_PORT;
 const hostname = process.env.REACT_APP_LOCALHOST;
@@ -52,7 +53,8 @@ function TweetList() {
   const handleResume = (term) => {
     dispatch(tweetStoreReseted());
     console.log('term: ', term);
-    dispatch(fetchTweets(term));
+    // dispatch(fetchTweets(term));
+    dispatch(setTweetTerm(term));
   };
 
   const handlePause = () => {
