@@ -1,6 +1,5 @@
-import { takeEvery, call, put, fork } from 'redux-saga/effects';
+import { takeEvery, call, put } from 'redux-saga/effects';
 import axios from 'axios';
-import notify from '../utils/toastify';
 import * as actions from '../store/action/saga.js';
 const port = process.env.REACT_APP_PORT;
 const hostname = process.env.REACT_APP_LOCALHOST;
@@ -35,10 +34,3 @@ function* api(action) {
 export function* watchApi() {
   yield takeEvery(actions.sagaApiCallBegan.type, api);
 }
-
-// export default function* tweetSagas() {
-//   yield fork(watchApi);
-//   yield fork(watchToast);
-//   yield fork(watchToastError);
-//   yield fork(watchWebsocket);
-// }

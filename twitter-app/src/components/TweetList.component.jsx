@@ -31,6 +31,7 @@ const client = new W3CWebSocket(urlWebSocket);
 function TweetList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(4);
+  const [time, setTime] = useState(new Date());
 
   const initialValue = {
     text: '',
@@ -49,11 +50,18 @@ function TweetList() {
       dispatch(getTweet(message.data));
     };
   }, [dispatch]);
+  // using for profiling
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setTime(new Date());
+  //   }, 1000);
+
+  //   return () => clearInterval(interval);
+  // }, []);
 
   const handleResume = (term) => {
     dispatch(tweetStoreReseted());
     console.log('term: ', term);
-    // dispatch(fetchTweets(term));
     dispatch(setTweetTerm(term));
   };
 
@@ -73,10 +81,10 @@ function TweetList() {
     <div className="row">
       <div className="col s12 m4 l4">
         <div className="input-field col s12">
+          {/* <h1>{time.toISOString()}</h1> */}
           <SearchForm initialValues={searchTerm} handleResume={handleResume} />
-
           {allTweetIds.length > 0 ? (
-            <Controls allTweetIds={allTweetIds} handlePause={handlePause} />
+            <Controls handlePause={handlePause} />
           ) : null}
         </div>
       </div>

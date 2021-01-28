@@ -1,11 +1,13 @@
-import FilterControls from './FilterControls.component.jsx';
-
-function Controls({ allTweetIds, handlePause }) {
+function Controls({ handlePause }) {
   return (
     <div>
-      {allTweetIds.length > 0 ? (
-        <FilterControls handlePause={handlePause} />
-      ) : null}
+      <a
+        href="#!"
+        className="btn-floating btn-small waves-effect waves-light pink accent-2"
+        onClick={handlePause}
+      >
+        <i className="material-icons">pause</i>
+      </a>
     </div>
   );
 }
