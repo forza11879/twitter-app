@@ -1,5 +1,5 @@
 import React from 'react';
-import Input from './Input.component.jsx';
+import Input from './Input.jsx';
 
 function FormikControl(props) {
   const { control, ...rest } = props;

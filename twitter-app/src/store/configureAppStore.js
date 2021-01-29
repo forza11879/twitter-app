@@ -1,7 +1,5 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import reducer from './reducer';
-// import toast from './middleware/toast.js';
-// import websocket from './middleware/websocket.js';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from '../saga/rootsaga';
 

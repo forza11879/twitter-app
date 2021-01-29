@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import TweetListPage from './pages/tweets/TweeListPage.js';
+import TweetListPage from './pages/tweets/TweeListPage.jsx';
 import './App.css';
 
 function App() {

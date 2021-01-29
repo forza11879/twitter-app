@@ -5,7 +5,7 @@
 //   CellMeasurer,
 //   CellMeasurerCache,
 // } from 'react-virtualized';
-import Card from './Card.component.jsx';
+import Card from './Card.jsx';
 
 function ItemsCards({ allTweetIds }) {
   return allTweetIds.map((item, index) => <Card key={index} data={item} />);

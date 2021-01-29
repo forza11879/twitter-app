@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import ItemsCards from './ItemsCards.component.jsx';
-import SearchForm from './form/Search-form.component';
-import Controls from './Controls.component.jsx';
-import Loading from './Loading.component.jsx';
-import Pagination from './Pagination.component';
+import Card from './Card.jsx';
+import SearchForm from './form/Search-form';
+import Controls from './Controls.jsx';
+import Loading from './Loading.jsx';
+import Pagination from './Pagination';
 import {
   tweetStoreReseted,
   setTweetTerm,
@@ -13,7 +13,6 @@ import {
 } from '../store/tweets.js';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { useDispatch, useSelector } from 'react-redux';
-// import { setTweetTerm } from '../store/action/saga.js';
 
 const port = process.env.REACT_APP_PORT;
 const hostname = process.env.REACT_APP_LOCALHOST;
@@ -22,22 +21,13 @@ console.log('port: ', port);
 console.log('localhost: ', hostname);
 
 const urlWebSocket = `ws://${hostname}:${port}`;
-// const url = `http://${hostname}:${port}`;
-
 // web socket
 const client = new W3CWebSocket(urlWebSocket);
-// console.log('web socket client: ', client);
 
 function TweetList() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(4);
-  const [time, setTime] = useState(new Date());
-
-  const initialValue = {
-    text: '',
-  };
-
-  const [searchTerm, setSearchTerm] = useState(initialValue);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [postsPerPage] = useState(4);
+  // const [time, setTime] = useState(new Date());
 
   const dispatch = useDispatch();
   const allTweetIds = useSelector(selectAllTweetIds);
@@ -69,20 +59,20 @@ function TweetList() {
     dispatch(fetchTweetsPause());
   };
 
-  // Get current posts
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = allTweetIds.slice(indexOfFirstPost, indexOfLastPost);
+  // // Get current posts
+  // const indexOfLastPost = currentPage * postsPerPage;
+  // const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  // const currentPosts = allTweetIds.slice(indexOfFirstPost, indexOfLastPost);
 
-  // Change page
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  // // Change page
+  // const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="row">
       <div className="col s12 m4 l4">
         <div className="input-field col s12">
           {/* <h1>{time.toISOString()}</h1> */}
-          <SearchForm initialValues={searchTerm} handleResume={handleResume} />
+          <SearchForm handleResume={handleResume} />
           {allTweetIds.length > 0 ? (
             <Controls handlePause={handlePause} />
           ) : null}
@@ -91,17 +81,22 @@ function TweetList() {
       <div className="col s12 m4 l4">
         <div>
           {allTweetIds.length > 0 ? (
-            <ItemsCards allTweetIds={currentPosts} />
+            <Pagination
+              data={allTweetIds}
+              RenderComponent={Card}
+              pageLimit={5}
+              dataLimit={4}
+            />
           ) : (
             <Loading />
           )}
         </div>
         <div>
-          <Pagination
+          {/* <Pagination
             postsPerPage={postsPerPage}
             totalPosts={allTweetIds.length}
             paginate={paginate}
-          />
+          /> */}
         </div>
       </div>
       <div className="col s12 m4 l4"></div>

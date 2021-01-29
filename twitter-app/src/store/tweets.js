@@ -1,11 +1,10 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-import { apiCallBegan, apiCallSuccess, apiCallFailed } from './action/api.js';
 import {
   sagaApiCallBegan,
   sagaApiCallSuccess,
   sagaApiCallFailed,
 } from './action/saga';
-import { webSocketCallBegan, webSocketCallFailed } from './action/websocket.js';
+import { webSocketCallBegan, webSocketCallFailed } from './action/saga.js';
 import { normalize } from 'normalizr';
 import { tweetSchema } from '../store/Schema/tweet.js';
 
@@ -48,15 +47,6 @@ export const {
 export default slice.reducer;
 
 // Action creators
-// export const fetchTweets = (term) =>
-//   apiCallBegan({
-//     url: `/setsearchterm/${term}`,
-//     method: 'get',
-//     // data: JSON.stringify({ term }), // data to send to the server
-//     onSuccess: apiCallSuccess.type,
-//     onError: apiCallFailed.type,
-//   });
-
 export const setTweetTerm = (term) =>
   sagaApiCallBegan({
     url: `/setsearchterm/${term}`,
@@ -65,17 +55,6 @@ export const setTweetTerm = (term) =>
     onSuccess: sagaApiCallSuccess.type,
     onError: sagaApiCallFailed.type,
   });
-
-// export const fetchTweetsPause = () =>
-//   apiCallBegan({
-//     url: '/pause',
-//     method: 'GET',
-//     // headers: {
-//     //   'Content-Type': 'application/json',
-//     // },
-//     onSuccess: apiCallSuccess.type,
-//     onError: apiCallFailed.type,
-//   });
 
 export const fetchTweetsPause = () =>
   sagaApiCallBegan({

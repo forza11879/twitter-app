@@ -1,24 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import FormikControl from './formik-control.js';
 
 function SearchForm(props) {
-  const { initialValues, handleResume } = props;
+  const initialValue = {
+    text: '',
+  };
+
+  const [value, setSearchTerm] = useState(initialValue);
+  const { handleResume } = props;
 
   const validationSchema = Yup.object({
     text: Yup.string().required('Required'),
   });
 
-  const onSubmit = (values) => {
-    const { text } = values;
+  const onSubmit = (value) => {
+    const { text } = value;
     console.log('text on submit: ', text);
     handleResume(text);
   };
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={value}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
