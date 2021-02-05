@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Card from './Card.jsx';
-import SearchForm from './form/Search-form';
-import Controls from './Controls.jsx';
-import Loading from './Loading.jsx';
+import Card from './Card';
+import SearchForm from '../form/Search-form';
+import Controls from './Controls';
+import Loading from './Loading';
 import Pagination from './Pagination';
 import {
   tweetStoreReseted,
@@ -10,7 +10,7 @@ import {
   fetchTweetsPause,
   selectAllTweetIds,
   getTweet,
-} from '../store/tweets.js';
+} from '../../store/tweets.js';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { useDispatch, useSelector } from 'react-redux';
 

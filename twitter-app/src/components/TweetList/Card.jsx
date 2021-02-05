@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { selectTweetById, selectUserById } from '../store/tweets.js';
+import { selectTweetById, selectUserById } from '../../store/tweets.js';
 
 function Card({ data }) {
   const { user, text, created_at } = useSelector(selectTweetById(data));
